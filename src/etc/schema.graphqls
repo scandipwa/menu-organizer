@@ -1,0 +1,35 @@
+#/**
+#* ScandiPWA_MenuOrganizerGraphQl
+#*
+#* @category    Scandiweb
+#* @package     ScandiPWA_MenuOrganizerGraphQl
+#* @author      Raivis Dejus <info@scandiweb.com>
+#* @copyright   Copyright (c) 2018 Scandiweb, Ltd (https://scandiweb.com)
+#*/
+
+type Query {
+    scandiwebMenu(id: ID!): Menu @resolver(class: "ScandiPWA\\MenuOrganizer\\Model\\Resolver\\Menu") @doc(description: "Returns Scandiweb Menu Manager menu data")
+}
+
+type Menu @doc(description: ""){
+    menu_id: ID @doc(description: "")
+    title: String @doc(description: "")
+    is_active: Boolean @doc(description: "")
+    css_class: String @doc(description: "")
+    items: [Item]
+}
+
+type Item @doc(description: "") {
+    item_id: ID @doc(description: "")
+    title: String @doc(description: "")
+    item_class: String @doc(description: "CSS class of the item")
+    parent_id: Int @doc(description: "")
+    url: String @doc(description: "")
+    url_type: Int @doc(description: "0 - regular link, 1 - cms page, 2 - category")
+    position: Int @doc(description: "")
+    is_active: Boolean @doc(description: "")
+    cms_page_identifier: String @doc(description: "")
+    is_promo: Int @doc(description: "Boolean if category is promotional category")
+    promo_image: String @doc(description: "Promo category image background")
+    category_id: Int @doc(description: "Category id")
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category ScandiPWA
+ * @package ScandiPWA\MenuOrganizer
+ * @author Alfreds Genkins alfreds@scandiweb.com
+ * @copyright Copyright (c) 2015 Scandiweb, Ltd (http://scandiweb.com)
+ * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="ScandiPWA_MenuOrganizer" setup_version="0.1.0">
+        <sequence>
+            <module name="Scandiweb_Core"/>
+        </sequence>
+    </module>
+</config>

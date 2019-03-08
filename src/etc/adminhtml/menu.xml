@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category ScandiPWA
+ * @package ScandiPWA\MenuOrganizer
+ * @author Dmitrijs Sitovs <info@scandiweb.com / dmitrijssh@scandiweb.com / dsitovs@gmail.com>
+ * @copyright Copyright (c) 2015 Scandiweb, Ltd (http://scandiweb.com)
+ * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="ScandiPWA_MenuOrganizer::navigation" title="Navigation" module="ScandiPWA_MenuOrganizer" sortOrder="10" parent="Scandiweb_Core::all" resource="ScandiPWA_MenuOrganizer::navigation"/>
+            <add id="ScandiPWA_MenuOrganizer::navigation_menu" title="Menu Manager" module="ScandiPWA_MenuOrganizer" sortOrder="10" parent="ScandiPWA_MenuOrganizer::navigation" action="scandipwa_menuorganizer/menu/index" dependsOnModule="Scandiweb_Core" resource="ScandiPWA_MenuOrganizer::navigation_menu"/>
+    </menu>
+</config>

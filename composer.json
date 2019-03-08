@@ -1,0 +1,19 @@
+{
+    "name": "scandipwa/menu-organizer",
+    "description": "Scandiweb Menu Organizer for ScandiPWA",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0"
+    ],
+    "require": {
+        "scandiweb/module-core": "~0.1.2"
+    },
+    "autoload": {
+        "files": [
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "ScandiPWA\\MenuOrganizer\\": "src"
+        }
+    }
+}
