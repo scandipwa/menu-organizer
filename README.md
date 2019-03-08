@@ -1,21 +1,23 @@
-# Scandiweb_Menumanager
+# ScandiPWA_MenuOrganizer
 
-This module is used to create customized navigation for Magento 2.
+This repository is a module for Magento 2. This module is used to create customized navigation.
 
-## Example on how-to add menu to the Magento store
+## How to use?
 
-```
-<?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <body>
-        <move element="custom.topnav" destination="store.menu" after=""/>
-        <referenceContainer name="page.top">
-            <block class="ScandiPWA\MenuOrganizer\Block\Menu" name="custom.navigation" template="html/menu.phtml" ttl="3600">
-                <arguments>
-                    <argument name="identifier" xsi:type="string">main_navigation</argument>
-                </arguments>
-            </block>
-        </referenceContainer>
-    </body>
-</page>
-```
+### In admin panel
+
+1. Find the `Scandiweb` logo in the left navigation bar.
+2. Go to Navigation > Menu Manager.
+3. Find `Add New Menu` button in the right top corner, click it.
+4. Enter the required fields (Menu title, identifier, status).
+5. Find the `Save and Continue Edit` in the navigation on the top right corner, click it.
+5. Find the `Assigned Menu Items` in the navigation on the left. click it.
+6. Click `Add item` in the top right corner.
+7. Enter the required fields (Menu item title, URL type, URL).
+8. Choose URL parent item, opening type and status, click `Save`.
+
+Congratulations! You have successfully created your first ScandiPWA menu! 🎉
+
+### Via GraphQL endpoint
+
+Please refer to [schema.graphqls](./src/etc/schema.graphqls) to see all available fields to query.
