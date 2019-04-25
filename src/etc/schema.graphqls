@@ -21,6 +21,7 @@ type Menu @doc(description: ""){
 
 type Item @doc(description: "") {
     item_id: ID @doc(description: "")
+    icon: String @doc(description: "Category icon")
     title: String @doc(description: "")
     item_class: String @doc(description: "CSS class of the item")
     parent_id: Int @doc(description: "")
