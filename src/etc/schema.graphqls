@@ -24,6 +24,7 @@ type Item @doc(description: "") {
     icon: String @doc(description: "Category icon")
     title: String @doc(description: "")
     item_class: String @doc(description: "CSS class of the item")
+    text_color: String @doc(description: "Text color of the item")
     parent_id: Int @doc(description: "")
     url: String @doc(description: "")
     url_type: Int @doc(description: "0 - regular link, 1 - cms page, 2 - category")
@@ -33,4 +34,5 @@ type Item @doc(description: "") {
     is_promo: Int @doc(description: "Boolean if category is promotional category")
     promo_image: String @doc(description: "Promo category image background")
     category_id: Int @doc(description: "Category id")
+    icon: String @doc(description: "Item icon")
 }

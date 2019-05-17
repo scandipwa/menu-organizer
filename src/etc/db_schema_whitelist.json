@@ -22,6 +22,7 @@
             "parent_id": true,
             "title": true,
             "item_class": true,
+            "text_color": true,
             "identifier": true,
             "url": true,
             "open_type": true,

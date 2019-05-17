@@ -120,6 +120,17 @@ class Form extends Generic
         );
 
         $fieldset->addField(
+            'text_color',
+            'text',
+            [
+                'name' => 'text_color',
+                'label' => __('Menu Item Text Color'),
+                'title' => __('Menu Item Text Color'),
+                'required' => false
+            ]
+        );
+
+        $fieldset->addField(
             'url_type',
             'select',
             [

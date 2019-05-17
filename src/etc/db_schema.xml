@@ -23,6 +23,7 @@
         <column xsi:type="smallint" name="parent_id" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
         <column xsi:type="varchar" name="title" nullable="false" length="255"/>
         <column xsi:type="varchar" name="item_class" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="text_color" nullable="false" length="255"/>
         <column xsi:type="varchar" name="identifier" nullable="false" length="100"/>
         <column xsi:type="text" name="url" nullable="true"/>
         <column xsi:type="smallint" name="open_type" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>

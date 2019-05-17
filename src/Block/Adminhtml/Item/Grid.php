@@ -96,6 +96,16 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         );
 
         $this->addColumn(
+            'text_color',
+            [
+                'header' => __('Item Text Color'),
+                'type' => 'text',
+                'index' => 'text_color',
+                'escape' => true
+            ]
+        );
+
+        $this->addColumn(
             'parent_title',
             [
                 'header' => __('Parent Item'),
