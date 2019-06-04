@@ -26,7 +26,7 @@ class ItemFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Scandiweb\\Menumanager\\Model\\Item')
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\ScandiPWA\\MenuOrganizer\\Model\\Item')
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
