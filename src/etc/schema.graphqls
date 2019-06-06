@@ -34,5 +34,4 @@ type Item @doc(description: "") {
     is_promo: Int @doc(description: "Boolean if category is promotional category")
     promo_image: String @doc(description: "Promo category image background")
     category_id: Int @doc(description: "Category id")
-    icon: String @doc(description: "Item icon")
 }
