@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace Technodom\MenuOrganizer\Model\Resolver;
+namespace ScandiPWA\MenuOrganizer\Model\Resolver;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -24,7 +24,7 @@ use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCo
 /**
  * Class Menu
  *
- * @package Technodom\MenumanagerGraphQl\Model\Resolver
+ * @package ScandiPWA\MenumanagerGraphQl\Model\Resolver
  */
 class Menu implements ResolverInterface
 {
