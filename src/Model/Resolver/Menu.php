@@ -9,7 +9,7 @@
  */
 declare(strict_types=1);
 
-namespace ScandiPWA\MenuOrganizer\Model\Resolver;
+namespace Technodom\MenuOrganizer\Model\Resolver;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -23,7 +23,8 @@ use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCo
 
 /**
  * Class Menu
- * @package Scandiweb\MenumanagerGraphQl\Model\Resolver
+ *
+ * @package Technodom\MenumanagerGraphQl\Model\Resolver
  */
 class Menu implements ResolverInterface
 {
@@ -67,12 +68,15 @@ class Menu implements ResolverInterface
     }
 
     /**
+     * Menu organizer resolver (lines concerning menu id are changed from core scandipwa menumanager)
+     *
      * @param Field $field
-     * @param $context
+     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args
      * @return Value
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -85,13 +89,18 @@ class Menu implements ResolverInterface
             return null;
         };
 
-        if (isset($args['id'])) {
+        if (isset($args['identifier'])) {
             $menu = $this->menuCollectionFactory->create();
-            $menu->addFieldToFilter('menu_id', $args['id'])->load();
+
+            /** Updated with identifier filtering */
+            $menu->addFieldToFilter('identifier', $args['identifier'])->load();
+
             $menuData = $menu->getFirstItem()->getData();
 
             $items = $this->itemCollectionFactory->create();
-            $items->addMenuFilter($args['id'])
+
+            /** Updated with menu id taken from menu data */
+            $items->addMenuFilter($menuData['menu_id'])
                 ->addStatusFilter()
                 ->setParentIdOrder()
                 ->setPositionOrder();
@@ -114,5 +123,4 @@ class Menu implements ResolverInterface
 
         return $this->valueFactory->create($result);
     }
-
 }

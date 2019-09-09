@@ -8,7 +8,7 @@
 #*/
 
 type Query {
-    scandiwebMenu(id: ID!): Menu @resolver(class: "ScandiPWA\\MenuOrganizer\\Model\\Resolver\\Menu") @doc(description: "Returns Scandiweb Menu Manager menu data")
+    scandiwebMenu(identifier: String!): Menu @resolver(class: "ScandiPWA\\MenuOrganizer\\Model\\Resolver\\Menu") @doc(description: "Returns Scandiweb Menu Manager menu data")
 }
 
 type Menu @doc(description: ""){
