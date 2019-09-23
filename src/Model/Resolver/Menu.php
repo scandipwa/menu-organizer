@@ -92,8 +92,13 @@ class Menu implements ResolverInterface
         if (isset($args['identifier'])) {
             $menu = $this->menuCollectionFactory->create();
 
+            $identifier = $args['identifier'];
+
             /** Updated with identifier filtering */
             $menu->addFieldToFilter('identifier', $args['identifier'])->load();
+
+            if($menu->count() < 1)
+                throw new \InvalidArgumentException("Could not find menu with identifier '${identifier}'");
 
             $menuData = $menu->getFirstItem()->getData();
 
