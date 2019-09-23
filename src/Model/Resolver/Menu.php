@@ -11,15 +11,12 @@ declare(strict_types=1);
 
 namespace ScandiPWA\MenuOrganizer\Model\Resolver;
 
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
-use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-
-use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu\CollectionFactory as MenuCollectionFactory;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCollectionFactory;
+use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu\CollectionFactory as MenuCollectionFactory;
 
 /**
  * Class Menu
@@ -29,20 +26,13 @@ use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCo
 class Menu implements ResolverInterface
 {
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
      * @var MenuCollectionFactory
      */
     protected $menuCollectionFactory;
-
     /**
      * @var ItemCollectionFactory
      */
     protected $itemCollectionFactory;
-
     /**
      * @var CategoryRepositoryInterface
      */
@@ -50,18 +40,16 @@ class Menu implements ResolverInterface
 
     /**
      * Menu constructor.
-     * @param ValueFactory $valueFactory
      * @param MenuCollectionFactory $menuCollectionFactory
      * @param ItemCollectionFactory $itemCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
-        ValueFactory $valueFactory,
         MenuCollectionFactory $menuCollectionFactory,
         ItemCollectionFactory $itemCollectionFactory,
         CategoryRepositoryInterface $categoryRepository
-    ) {
-        $this->valueFactory = $valueFactory;
+    )
+    {
         $this->menuCollectionFactory = $menuCollectionFactory;
         $this->itemCollectionFactory = $itemCollectionFactory;
         $this->categoryRepository = $categoryRepository;
@@ -75,7 +63,6 @@ class Menu implements ResolverInterface
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args
-     * @return Value
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function resolve(
@@ -84,48 +71,56 @@ class Menu implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
-        $result = function () {
-            return null;
-        };
+    )
+    {
+        $identifier = $args['identifier'];
 
-        if (isset($args['identifier'])) {
-            $menu = $this->menuCollectionFactory->create();
+        $menuCollection = $this->menuCollectionFactory
+            ->create()
+            ->addFieldToFilter('identifier', $identifier)
+            ->load();
 
-            $identifier = $args['identifier'];
+        if ($menuCollection->count() < 1)
+            throw new \InvalidArgumentException("Could not find menu with identifier '${identifier}'");
 
-            /** Updated with identifier filtering */
-            $menu->addFieldToFilter('identifier', $args['identifier'])->load();
+        $menu = $menuCollection
+            ->getFirstItem()
+            ->getData();
 
-            if($menu->count() < 1)
-                throw new \InvalidArgumentException("Could not find menu with identifier '${identifier}'");
+        return array_merge(
+            $menu,
+            [
+                'items' => $this->getMenuItems($menu['menu_id'])
+            ]);
+    }
 
-            $menuData = $menu->getFirstItem()->getData();
+    /**
+     * @param string $menuId
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getMenuItems(string $menuId): array
+    {
+        $categoryIdKey = 'category_id';
 
-            $items = $this->itemCollectionFactory->create();
+        $menuItems = $this->itemCollectionFactory
+            ->create()
+            ->addMenuFilter($menuId)
+            ->addStatusFilter()
+            ->setParentIdOrder()
+            ->setPositionOrder()
+            ->getData();
 
-            /** Updated with menu id taken from menu data */
-            $items->addMenuFilter($menuData['menu_id'])
-                ->addStatusFilter()
-                ->setParentIdOrder()
-                ->setPositionOrder();
+        foreach ($menuItems as &$item) {
+            if (!isset($item[$categoryIdKey])) continue;
 
-            $menuData['items'] = $items->getData();
+            $categoryUrlPath = $this->categoryRepository
+                ->get($item[$categoryIdKey])
+                ->getUrlPath();
 
-            foreach ($menuData['items'] as &$item) {
-                if (isset($item['category_id'])) {
-                    $category = $this->categoryRepository->get($item['category_id']);
-                    $item['url'] = sprintf('/%s', $category->getUrlPath());
-                }
-            }
-
-            if ($menuData) {
-                $result = function () use ($menuData) {
-                    return $menuData;
-                };
-            }
+            $item['url'] = "/${categoryUrlPath}";
         }
 
-        return $this->valueFactory->create($result);
+        return $menuItems;
     }
 }
