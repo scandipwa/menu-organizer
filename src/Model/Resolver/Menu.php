@@ -29,10 +29,12 @@ class Menu implements ResolverInterface
      * @var MenuCollectionFactory
      */
     protected $menuCollectionFactory;
+
     /**
      * @var ItemCollectionFactory
      */
     protected $itemCollectionFactory;
+
     /**
      * @var CategoryRepositoryInterface
      */
