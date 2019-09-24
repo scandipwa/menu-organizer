@@ -15,8 +15,8 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use ScandiPWA\MenuOrganizer\Model\MenuFactory;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCollectionFactory;
-use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu\CollectionFactory as MenuCollectionFactory;
 
 /**
  * Class Menu
@@ -28,9 +28,9 @@ class Menu implements ResolverInterface
     const CATEGORY_ID_KEY = 'category_id';
 
     /**
-     * @var MenuCollectionFactory
+     * @var MenuFactory
      */
-    protected $menuCollectionFactory;
+    protected $menuFactory;
 
     /**
      * @var ItemCollectionFactory
@@ -49,12 +49,12 @@ class Menu implements ResolverInterface
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
-        MenuCollectionFactory $menuCollectionFactory,
+        MenuFactory $menuFactory,
         ItemCollectionFactory $itemCollectionFactory,
         CategoryRepositoryInterface $categoryRepository
     )
     {
-        $this->menuCollectionFactory = $menuCollectionFactory;
+        $this->menuFactory = $menuFactory;
         $this->itemCollectionFactory = $itemCollectionFactory;
         $this->categoryRepository = $categoryRepository;
     }
@@ -79,20 +79,16 @@ class Menu implements ResolverInterface
     {
         $identifier = $args['identifier'];
 
-        $menuCollection = $this->menuCollectionFactory
+        $menu = $this->menuFactory
             ->create()
-            ->addFieldToFilter('identifier', $identifier)
-            ->load();
+            ->load($identifier);
 
-        if ($menuCollection->count() < 1)
+        if ($menu->getId() === null) {
             throw new \InvalidArgumentException("Could not find menu with identifier '${identifier}'");
-
-        $menu = $menuCollection
-            ->getFirstItem()
-            ->getData();
+        }
 
         return array_merge(
-            $menu,
+            $menu->getData(),
             [
                 'items' => $this->getMenuItems($menu['menu_id'])
             ]);
