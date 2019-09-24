@@ -25,6 +25,8 @@ use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu\CollectionFactory as MenuCo
  */
 class Menu implements ResolverInterface
 {
+    const CATEGORY_ID_KEY = 'category_id';
+
     /**
      * @var MenuCollectionFactory
      */
@@ -99,12 +101,9 @@ class Menu implements ResolverInterface
     /**
      * @param string $menuId
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getMenuItems(string $menuId): array
     {
-        $categoryIdKey = 'category_id';
-
         $menuItems = $this->itemCollectionFactory
             ->create()
             ->addMenuFilter($menuId)
@@ -113,16 +112,16 @@ class Menu implements ResolverInterface
             ->setPositionOrder()
             ->getData();
 
-        foreach ($menuItems as &$item) {
-            if (!isset($item[$categoryIdKey])) continue;
+        return array_map(function ($item) {
+            if (isset($item[static::CATEGORY_ID_KEY])) {
+                $categoryUrlPath = $this->categoryRepository
+                    ->get($item[static::CATEGORY_ID_KEY])
+                    ->getUrlPath();
 
-            $categoryUrlPath = $this->categoryRepository
-                ->get($item[$categoryIdKey])
-                ->getUrlPath();
+                $item['url'] = "/${categoryUrlPath}";
+            }
 
-            $item['url'] = "/${categoryUrlPath}";
-        }
-
-        return $menuItems;
+            return $item;
+        }, $menuItems);
     }
 }
