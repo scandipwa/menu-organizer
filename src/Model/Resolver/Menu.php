@@ -44,7 +44,7 @@ class Menu implements ResolverInterface
 
     /**
      * Menu constructor.
-     * @param MenuCollectionFactory $menuCollectionFactory
+     * @param MenuFactory $menuFactory
      * @param ItemCollectionFactory $itemCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
      */
