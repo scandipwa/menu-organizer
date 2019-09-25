@@ -17,6 +17,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use ScandiPWA\MenuOrganizer\Model\MenuFactory;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCollectionFactory;
+use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu as MenuResourceModel;
 
 /**
  * Class Menu
@@ -25,12 +26,17 @@ use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCo
  */
 class Menu implements ResolverInterface
 {
-    const CATEGORY_ID_KEY = 'category_id';
+    public const CATEGORY_ID_KEY = 'category_id';
 
     /**
      * @var MenuFactory
      */
     protected $menuFactory;
+
+    /**
+     * @var MenuResourceModel
+     */
+    protected $menuResourceModel;
 
     /**
      * @var ItemCollectionFactory
@@ -50,11 +56,13 @@ class Menu implements ResolverInterface
      */
     public function __construct(
         MenuFactory $menuFactory,
+        MenuResourceModel $menuResourceModel,
         ItemCollectionFactory $itemCollectionFactory,
         CategoryRepositoryInterface $categoryRepository
     )
     {
         $this->menuFactory = $menuFactory;
+        $this->menuResourceModel = $menuResourceModel;
         $this->itemCollectionFactory = $itemCollectionFactory;
         $this->categoryRepository = $categoryRepository;
     }
@@ -79,9 +87,8 @@ class Menu implements ResolverInterface
     {
         $identifier = $args['identifier'];
 
-        $menu = $this->menuFactory
-            ->create()
-            ->load($identifier);
+        $menu = $this->menuFactory->create();
+        $this->menuResourceModel->load($menu, $identifier);
 
         if ($menu->getId() === null) {
             throw new \InvalidArgumentException("Could not find menu with identifier '${identifier}'");
@@ -109,9 +116,9 @@ class Menu implements ResolverInterface
             ->getData();
 
         return array_map(function ($item) {
-            if (isset($item[static::CATEGORY_ID_KEY])) {
+            if (isset($item[self::CATEGORY_ID_KEY])) {
                 $categoryUrlPath = $this->categoryRepository
-                    ->get($item[static::CATEGORY_ID_KEY])
+                    ->get($item[self::CATEGORY_ID_KEY])
                     ->getUrlPath();
 
                 $item['url'] = "/${categoryUrlPath}";
