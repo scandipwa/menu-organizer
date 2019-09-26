@@ -91,7 +91,7 @@ class Menu implements ResolverInterface
         $this->menuResourceModel->load($menu, $identifier);
 
         if ($menu->getId() === null) {
-            throw new \InvalidArgumentException("Could not find menu with identifier '${identifier}'");
+            throw new \InvalidArgumentException(sprintf("Could not find menu with identifier '%s'", $identifier));
         }
 
         return array_merge(
@@ -121,7 +121,7 @@ class Menu implements ResolverInterface
                     ->get($item[self::CATEGORY_ID_KEY])
                     ->getUrlPath();
 
-                $item['url'] = "/${categoryUrlPath}";
+                $item['url'] = sprintf("/%s", $categoryUrlPath);
             }
 
             return $item;
