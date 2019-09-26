@@ -121,7 +121,7 @@ class Menu implements ResolverInterface
                     ->get($item[self::CATEGORY_ID_KEY])
                     ->getUrlPath();
 
-                $item['url'] = sprintf("/%s", $categoryUrlPath);
+                $item['url'] = DIRECTORY_SEPARATOR . $categoryUrlPath;
             }
 
             return $item;
