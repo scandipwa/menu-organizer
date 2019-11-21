@@ -196,18 +196,6 @@ class Form extends Generic
         );
 
         $fieldset->addField(
-            'open_type',
-            'select',
-            [
-                'label' => __('Open Type'),
-                'title' => __('Open Type'),
-                'name' => 'open_type',
-                'required' => true,
-                'options' => $this->_menumanagerHelper->getOpenTypes(),
-            ]
-        );
-
-        $fieldset->addField(
             'is_active',
             'select',
             [
