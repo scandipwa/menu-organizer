@@ -12,9 +12,12 @@ declare(strict_types=1);
 namespace ScandiPWA\MenuOrganizer\Model\Resolver;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Store\Model\StoreManagerInterface;
 use ScandiPWA\MenuOrganizer\Model\MenuFactory;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCollectionFactory;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu as MenuResourceModel;
@@ -49,18 +52,26 @@ class Menu implements ResolverInterface
     protected $categoryRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * Menu constructor.
+     * @param StoreManagerInterface $storeManager
      * @param MenuFactory $menuFactory
+     * @param MenuResourceModel $menuResourceModel
      * @param ItemCollectionFactory $itemCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
+        StoreManagerInterface $storeManager,
         MenuFactory $menuFactory,
         MenuResourceModel $menuResourceModel,
         ItemCollectionFactory $itemCollectionFactory,
         CategoryRepositoryInterface $categoryRepository
-    )
-    {
+    ) {
+        $this->storeManager = $storeManager;
         $this->menuFactory = $menuFactory;
         $this->menuResourceModel = $menuResourceModel;
         $this->itemCollectionFactory = $itemCollectionFactory;
@@ -71,11 +82,13 @@ class Menu implements ResolverInterface
      * Menu organizer resolver (lines concerning menu id are changed from core scandipwa menumanager)
      *
      * @param Field $field
-     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context
+     * @param ContextInterface $context
      * @param ResolveInfo $info
      * @param array|null $value
      * @param array|null $args
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return array
+     *
+     * @throws NoSuchEntityException
      */
     public function resolve(
         Field $field,
@@ -83,11 +96,13 @@ class Menu implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    )
-    {
+    ) {
         $identifier = $args['identifier'];
 
-        $menu = $this->menuFactory->create();
+        $menu = $this->menuFactory->create()->setStoreId(
+            $this->storeManager->getStore()->getId()
+        );
+
         $this->menuResourceModel->load($menu, $identifier);
 
         if ($menu->getId() === null) {
@@ -98,7 +113,8 @@ class Menu implements ResolverInterface
             $menu->getData(),
             [
                 'items' => $this->getMenuItems($menu['menu_id'])
-            ]);
+            ]
+        );
     }
 
     /**
