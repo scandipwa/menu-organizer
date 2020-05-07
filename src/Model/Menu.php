@@ -19,12 +19,12 @@ class Menu extends \Magento\Framework\Model\AbstractModel implements MenuInterfa
     /**
      * CMS page cache tag
      */
-    const CACHE_TAG = 'scandipwa_menuorganizer_menu';
+    const CACHE_TAG = 'sw_m';
 
     /**
      * @var string
      */
-    protected $_cacheTag = 'scandipwa_menuorganizer_menu';
+    protected $_cacheTag = 'sw_m';
 
     /**
      * Prefix of model events names
