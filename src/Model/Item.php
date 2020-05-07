@@ -20,12 +20,12 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
     /**
      * CMS page cache tag
      */
-    const CACHE_TAG = 'scandipwa_menuorganizer_item';
+    const CACHE_TAG = 'sw_mi';
 
     /**
      * @var string
      */
-    protected $_cacheTag = 'scandipwa_menuorganizer_item';
+    protected $_cacheTag = 'sw_mi';
 
     /**
      * Prefix of model events names
