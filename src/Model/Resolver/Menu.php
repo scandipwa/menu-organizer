@@ -12,12 +12,14 @@ declare(strict_types=1);
 namespace ScandiPWA\MenuOrganizer\Model\Resolver;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Model\StoreManagerInterface;
+use ScandiPWA\MenuOrganizer\Api\Data\ItemInterface;
 use ScandiPWA\MenuOrganizer\Model\MenuFactory;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCollectionFactory;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu as MenuResourceModel;
@@ -47,14 +49,14 @@ class Menu implements ResolverInterface
     protected $itemCollectionFactory;
 
     /**
-     * @var CategoryRepositoryInterface
-     */
-    protected $categoryRepository;
-
-    /**
      * @var StoreManagerInterface
      */
     protected $storeManager;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
 
     /**
      * Menu constructor.
@@ -62,20 +64,19 @@ class Menu implements ResolverInterface
      * @param MenuFactory $menuFactory
      * @param MenuResourceModel $menuResourceModel
      * @param ItemCollectionFactory $itemCollectionFactory
-     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         MenuFactory $menuFactory,
         MenuResourceModel $menuResourceModel,
         ItemCollectionFactory $itemCollectionFactory,
-        CategoryRepositoryInterface $categoryRepository
+        CollectionFactory $collectionFactory
     ) {
         $this->storeManager = $storeManager;
         $this->menuFactory = $menuFactory;
         $this->menuResourceModel = $menuResourceModel;
         $this->itemCollectionFactory = $itemCollectionFactory;
-        $this->categoryRepository = $categoryRepository;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -131,16 +132,32 @@ class Menu implements ResolverInterface
             ->setPositionOrder()
             ->getData();
 
-        return array_map(function ($item) {
-            if (isset($item[self::CATEGORY_ID_KEY])) {
-                $categoryUrlPath = $this->categoryRepository
-                    ->get($item[self::CATEGORY_ID_KEY])
-                    ->getUrlPath();
+        $categoryIds = [];
+        $itemsMap = [];
 
-                $item['url'] = DIRECTORY_SEPARATOR . $categoryUrlPath;
+        foreach ($menuItems as $item) {
+            $itemId = $item[ItemInterface::ITEM_ID];
+
+            if (isset($item[self::CATEGORY_ID_KEY])) {
+                $catId = $item[self::CATEGORY_ID_KEY];
+                $categoryIds[$catId] = $itemId;
             }
 
-            return $item;
-        }, $menuItems);
+            $itemsMap[$itemId] = $item;
+        }
+
+        $collection = $this->collectionFactory->create();
+        $categories = $collection
+            ->addFieldToSelect('url_path')
+            ->addIdFilter($categoryIds)
+            ->getItems();
+
+        foreach ($categories as $category) {
+            $catId = $category->getId();
+            $itemId = $categoryIds[$catId];
+            $itemsMap[$itemId]['url'] = DIRECTORY_SEPARATOR . $category->getUrlPath();
+        }
+
+        return array_values($itemsMap);
     }
 }

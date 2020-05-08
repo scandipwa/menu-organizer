@@ -18,16 +18,6 @@ use Magento\Framework\Model\AbstractModel;
 class Item extends AbstractModel implements ItemInterface, IdentityInterface
 {
     /**
-     * CMS page cache tag
-     */
-    const CACHE_TAG = 'sw_mi';
-
-    /**
-     * @var string
-     */
-    protected $_cacheTag = 'sw_mi';
-
-    /**
      * Prefix of model events names
      *
      * @var string
@@ -51,7 +41,7 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [Menu::CACHE_TAG . '_' . $this->getMenuId()];
     }
 
     /**
