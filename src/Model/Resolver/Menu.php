@@ -90,6 +90,7 @@ class Menu implements ResolverInterface
      * @return array
      *
      * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function resolve(
         Field $field,
@@ -121,6 +122,7 @@ class Menu implements ResolverInterface
     /**
      * @param string $menuId
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getMenuItems(string $menuId): array
     {
@@ -140,7 +142,12 @@ class Menu implements ResolverInterface
 
             if (isset($item[self::CATEGORY_ID_KEY])) {
                 $catId = $item[self::CATEGORY_ID_KEY];
-                $categoryIds[$catId] = $itemId;
+
+                if (isset($categoryIds[$catId])) {
+                    $categoryIds[$catId][] = $itemId;
+                } else {
+                    $categoryIds[$catId] = [$itemId];
+                }
             }
 
             $itemsMap[$itemId] = $item;
@@ -148,14 +155,17 @@ class Menu implements ResolverInterface
 
         $collection = $this->collectionFactory->create();
         $categories = $collection
-            ->addFieldToSelect('url_path')
-            ->addIdFilter($categoryIds)
+            ->addAttributeToSelect('url_path')
+            ->addFieldToFilter('entity_id', ['in' => array_keys($categoryIds)])
             ->getItems();
 
         foreach ($categories as $category) {
             $catId = $category->getId();
-            $itemId = $categoryIds[$catId];
-            $itemsMap[$itemId]['url'] = DIRECTORY_SEPARATOR . $category->getUrlPath();
+            $itemIds = $categoryIds[$catId];
+
+            foreach ($itemIds as $itemId) {
+                $itemsMap[$itemId]['url'] = DIRECTORY_SEPARATOR . $category->getUrlPath();
+            }
         }
 
         return array_values($itemsMap);
