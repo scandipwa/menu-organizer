@@ -6,6 +6,7 @@
         "OSL-3.0"
     ],
     "require": {
+        "magento/magento2-base": "^2.3.5",
         "scandiweb/module-core": "~0.1.2"
     },
     "autoload": {
