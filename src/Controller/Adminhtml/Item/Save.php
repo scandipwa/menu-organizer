@@ -62,12 +62,12 @@ class Save extends \Magento\Backend\App\Action
 
             if ($model->getData('is_active') !== '0') {
                 $activeItems = $model->getCollection()
-                    ->addFieldToFilter('parent_id', array('eq' => $model->getId()));
+                    ->addFieldToFilter('parent_id', ['eq' => $model->getId()]);
 
                 foreach ($activeItems as $item) {
                     $item->setData('is_active', '0')->save();
                     $activeSubItems = $model->getCollection()
-                        ->addFieldToFilter('parent_id', array('eq' => $item->getId()));
+                        ->addFieldToFilter('parent_id', ['eq' => $item->getId()]);
 
                     foreach ($activeSubItems as $item) {
                         $item->setData('is_active', '0')->save();
