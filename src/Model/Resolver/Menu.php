@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace ScandiPWA\MenuOrganizer\Model\Resolver;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -33,29 +33,19 @@ class Menu implements ResolverInterface
 {
     public const CATEGORY_ID_KEY = 'category_id';
 
-    /**
-     * @var MenuFactory
-     */
+    /** @var MenuFactory */
     protected $menuFactory;
 
-    /**
-     * @var MenuResourceModel
-     */
+    /** @var MenuResourceModel */
     protected $menuResourceModel;
 
-    /**
-     * @var ItemCollectionFactory
-     */
+    /** @var ItemCollectionFactory */
     protected $itemCollectionFactory;
 
-    /**
-     * @var StoreManagerInterface
-     */
+    /** @var StoreManagerInterface */
     protected $storeManager;
 
-    /**
-     * @var CollectionFactory
-     */
+    /** @var CollectionFactory */
     protected $collectionFactory;
 
     /**
@@ -64,6 +54,7 @@ class Menu implements ResolverInterface
      * @param MenuFactory $menuFactory
      * @param MenuResourceModel $menuResourceModel
      * @param ItemCollectionFactory $itemCollectionFactory
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -90,7 +81,7 @@ class Menu implements ResolverInterface
      * @return array
      *
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function resolve(
         Field $field,
@@ -122,7 +113,7 @@ class Menu implements ResolverInterface
     /**
      * @param string $menuId
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getMenuItems(string $menuId): array
     {
@@ -157,6 +148,7 @@ class Menu implements ResolverInterface
         $categories = $collection
             ->addAttributeToSelect('url_path')
             ->addFieldToFilter('entity_id', ['in' => array_keys($categoryIds)])
+            ->addFieldToFilter('is_active', 1)
             ->getItems();
 
         foreach ($categories as $category) {
@@ -165,6 +157,15 @@ class Menu implements ResolverInterface
 
             foreach ($itemIds as $itemId) {
                 $itemsMap[$itemId]['url'] = DIRECTORY_SEPARATOR . $category->getUrlPath();
+            }
+
+            unset($categoryIds[$catId]);
+        }
+
+        foreach ($itemsMap as $itemId => $item) {
+            // do not include items which URL can not be handled URL
+            if (!$item['cms_page_identifier'] && !$item['url']) {
+                unset($itemsMap[$itemId]);
             }
         }
 
