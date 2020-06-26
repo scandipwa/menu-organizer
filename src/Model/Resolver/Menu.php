@@ -11,16 +11,19 @@ declare(strict_types=1);
 
 namespace ScandiPWA\MenuOrganizer\Model\Resolver;
 
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use ScandiPWA\MenuOrganizer\Api\Data\ItemInterface;
 use ScandiPWA\MenuOrganizer\Model\MenuFactory;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CatCollectionFactory;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\CollectionFactory as ItemCollectionFactory;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu as MenuResourceModel;
 
@@ -32,6 +35,8 @@ use ScandiPWA\MenuOrganizer\Model\ResourceModel\Menu as MenuResourceModel;
 class Menu implements ResolverInterface
 {
     public const CATEGORY_ID_KEY = 'category_id';
+
+    public const CMS_PAGE_IDENTIFIER = 'cms_page_identifier';
 
     /** @var MenuFactory */
     protected $menuFactory;
@@ -45,8 +50,14 @@ class Menu implements ResolverInterface
     /** @var StoreManagerInterface */
     protected $storeManager;
 
-    /** @var CollectionFactory */
-    protected $collectionFactory;
+    /** @var CatCollectionFactory */
+    protected $catCollectionFactory;
+
+    /** @var PageCollectionFactory */
+    protected $pageCollectionFactory;
+
+    /** @var UrlInterface */
+    protected $urlBuilder;
 
     /**
      * Menu constructor.
@@ -54,20 +65,26 @@ class Menu implements ResolverInterface
      * @param MenuFactory $menuFactory
      * @param MenuResourceModel $menuResourceModel
      * @param ItemCollectionFactory $itemCollectionFactory
-     * @param CollectionFactory $collectionFactory
+     * @param CatCollectionFactory $catCollectionFactory
+     * @param PageCollectionFactory $pageCollectionFactory
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         MenuFactory $menuFactory,
         MenuResourceModel $menuResourceModel,
         ItemCollectionFactory $itemCollectionFactory,
-        CollectionFactory $collectionFactory
+        CatCollectionFactory $catCollectionFactory,
+        PageCollectionFactory $pageCollectionFactory,
+        UrlInterface $urlBuilder
     ) {
         $this->storeManager = $storeManager;
         $this->menuFactory = $menuFactory;
         $this->menuResourceModel = $menuResourceModel;
         $this->itemCollectionFactory = $itemCollectionFactory;
-        $this->collectionFactory = $collectionFactory;
+        $this->catCollectionFactory = $catCollectionFactory;
+        $this->pageCollectionFactory = $pageCollectionFactory;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -126,6 +143,7 @@ class Menu implements ResolverInterface
             ->getData();
 
         $categoryIds = [];
+        $pageIdentifiers = [];
         $itemsMap = [];
 
         foreach ($menuItems as $item) {
@@ -139,14 +157,22 @@ class Menu implements ResolverInterface
                 } else {
                     $categoryIds[$catId] = [$itemId];
                 }
+            } else if (isset($item[self::CMS_PAGE_IDENTIFIER])) {
+                $pageIdentifier = $item[self::CMS_PAGE_IDENTIFIER];
+
+                if (isset($pageIdentifiers[$pageIdentifier])) {
+                    $pageIdentifiers[$pageIdentifier][] = $itemId;
+                } else {
+                    $pageIdentifiers[$pageIdentifier] = [$itemId];
+                }
             }
 
             $itemsMap[$itemId] = $item;
         }
 
-        $collection = $this->collectionFactory->create();
-        $categories = $collection
-            ->addAttributeToSelect('url_path')
+        $catCollection = $this->catCollectionFactory->create();
+        $categories = $catCollection
+            ->addAttributeToSelect('*')
             ->addFieldToFilter('entity_id', ['in' => array_keys($categoryIds)])
             ->addFieldToFilter('is_active', 1)
             ->getItems();
@@ -156,15 +182,31 @@ class Menu implements ResolverInterface
             $itemIds = $categoryIds[$catId];
 
             foreach ($itemIds as $itemId) {
-                $itemsMap[$itemId]['url'] = DIRECTORY_SEPARATOR . $category->getUrlPath();
+                /** @var $category Category */
+                $itemsMap[$itemId]['url'] = parse_url($category->getUrl(), PHP_URL_PATH);
             }
+        }
 
-            unset($categoryIds[$catId]);
+        $pageCollection = $this->pageCollectionFactory->create();
+        $pages = $pageCollection
+            ->addFieldToFilter('identifier', ['in' => array_keys($pageIdentifiers)])
+            ->addFieldToFilter('is_active', 1)
+            ->addStoreFilter($this->storeManager->getStore()->getId())
+            ->getItems();
+
+        foreach ($pages as $page) {
+            $pageIdentifier = $page->getIdentifier();
+            $itemIds = $pageIdentifiers[$pageIdentifier];
+
+            foreach ($itemIds as $itemId) {
+                $url = $this->urlBuilder->getUrl(null, ['_direct' => $page->getIdentifier()]);
+                $itemsMap[$itemId]['url'] = parse_url($url, PHP_URL_PATH);
+            }
         }
 
         foreach ($itemsMap as $itemId => $item) {
             // do not include items which URL can not be handled URL
-            if (!$item['cms_page_identifier'] && !$item['url']) {
+            if (!$item['url']) {
                 unset($itemsMap[$itemId]);
             }
         }
