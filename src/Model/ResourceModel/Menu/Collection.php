@@ -118,4 +118,20 @@ class Collection extends AbstractCollection
 
         return $res;
     }
+
+    /**
+     * @return $this
+     */
+    protected function _afterLoadData()
+    {
+        parent::_afterLoadData();
+
+        $collection = clone $this;
+
+        if (count($collection)) {
+            $this->_eventManager->dispatch('scandipwa_menuorganizer_menu_collection_load_after', ['collection' => $collection]);
+        }
+
+        return $this;
+    }
 }
