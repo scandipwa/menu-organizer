@@ -16,6 +16,14 @@
         type="ScandiPWA\MenuOrganizer\Block\Renderer\Action"
     />
 
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="menu_generate" xsi:type="object">ScandiPWA\MenuOrganizer\Console\Command\MenuGenerateCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
     <virtualType name="MenuGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">
