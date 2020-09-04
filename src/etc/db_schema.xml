@@ -1,4 +1,15 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * ScandiPWA - Progressive Web App for Magento
+ *
+ * Copyright © Scandiweb, Inc. All rights reserved.
+ * See LICENSE for license details.
+ *
+ * @license OSL-3.0 (Open Software License ("OSL") v. 3.0)
+ * @link https://github.com/scandipwa/quote-graphql
+ */
+-->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="scandiweb_menumanager_menu" resource="default" engine="innodb">
         <column xsi:type="smallint" name="menu_id" padding="5" unsigned="true" nullable="false" identity="true"/>

@@ -1,17 +1,26 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @category ScandiPWA
- * @package ScandiPWA\MenuOrganizer
- * @author Alfreds Genkins alfreds@scandiweb.com
- * @copyright Copyright (c) 2015 Scandiweb, Ltd (http://scandiweb.com)
- * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+ * ScandiPWA - Progressive Web App for Magento
+ *
+ * Copyright © Scandiweb, Inc. All rights reserved.
+ * See LICENSE for license details.
+ *
+ * @license OSL-3.0 (Open Software License ("OSL") v. 3.0)
+ * @link https://github.com/scandipwa/quote-graphql
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="ScandiPWA_MenuOrganizer" setup_version="0.1.0">
         <sequence>
+            <module name="Magento_Cms" />
+            <module name="Magento_Store" />
+            <module name="Magento_Catalog" />
+            <module name="Magento_Backend" />
+            <module name="Magento_Captcha" />
+            <module name="Magento_MediaStorage" />
+            <module name="Magento_Ui" />
             <module name="Scandiweb_Core"/>
         </sequence>
     </module>

@@ -6,7 +6,14 @@
         "OSL-3.0"
     ],
     "require": {
-        "magento/magento2-base": "^2.3.5",
+        "magento/framework": "*",
+        "magento/module-cms": "*",
+        "magento/module-store": "*",
+        "magento/module-catalog": "*",
+        "magento/module-backend": "*",
+        "magento/module-captcha": "*",
+        "magento/module-media-storage": "*",
+        "magento/module-ui": "*",
         "scandiweb/module-core": "~0.1.2"
     },
     "autoload": {
