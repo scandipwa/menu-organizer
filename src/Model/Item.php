@@ -31,7 +31,7 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
      */
     protected function _construct()
     {
-        $this->_init('ScandiPWA\MenuOrganizer\Model\ResourceModel\Item');
+        $this->_init(\ScandiPWA\MenuOrganizer\Model\ResourceModel\Item::class);
     }
 
     /**
