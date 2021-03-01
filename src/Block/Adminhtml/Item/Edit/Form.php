@@ -165,7 +165,7 @@ class Form extends Generic
                 'name' => 'icon',
                 'label' => __('Icon'),
                 'title' => __('Icon'),
-                'note' => __('Allow image type: jpg, jpeg, gif, png, svg'),
+                'note' => __('Allow image type: jpg, jpeg, gif, png'),
             ]
         );
 
