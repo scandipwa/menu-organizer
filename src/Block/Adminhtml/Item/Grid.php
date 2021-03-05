@@ -91,7 +91,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Item CSS Class'),
                 'type' => 'text',
                 'index' => 'item_class',
-                'escape' => true
+                'escape' => true,
+                'filter_index' => 'main_table.item_class'
             ]
         );
 
@@ -103,7 +104,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'parent_title',
                 'escape' => true,
                 'renderer' => '\ScandiPWA\MenuOrganizer\Block\Adminhtml\Item\Renderer\Parentitem',
-                'filter' => false,
+                'filter' => false
             ]
         );
 
@@ -125,6 +126,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Position'),
                 'type' => 'number',
                 'index' => 'position',
+                'filter_index' => 'main_table.position'
             ]
         );
 
@@ -134,7 +136,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Status'),
                 'index' => 'is_active',
                 'type' => 'options',
-                'options' => $this->_menumanagerHelper->getAvailableStatuses()
+                'options' => $this->_menumanagerHelper->getAvailableStatuses(),
+                'filter_index' => 'main_table.is_active'
             ]
         );
 
