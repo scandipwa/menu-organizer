@@ -68,7 +68,7 @@ class Icon extends AbstractHelper
 
         try {
             $result = $this->uploadFactory->create(['fileId' => $fileId])
-                ->setAllowedExtensions(['png', 'jpg', 'jpeg', 'gif', 'svg'])
+                ->setAllowedExtensions(['png', 'jpg', 'jpeg', 'gif'])
                 ->setAllowRenameFiles(true)
                 ->save($this->mediaDirectory->getAbsolutePath(static::ICON_DIR));
 
