@@ -2,7 +2,7 @@
 namespace ScandiPWA\MenuOrganizer\Model;
 
 /**
- * Factory class for @see \Magento\Cms\Model\Page
+ * Factory class for @see \ScandiPWA\MenuOrganizer\Model\Menu
  */
 class MenuFactory
 {
@@ -36,7 +36,7 @@ class MenuFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Cms\Model\Page
+     * @return \ScandiPWA\MenuOrganizer\Model\Menu
      */
     public function create(array $data = array())
     {
