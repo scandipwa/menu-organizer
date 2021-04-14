@@ -37,6 +37,10 @@ class Collection extends AbstractCollection
             ['parent_title' => 'title']
         )->order('main_table.item_id ASC');
 
+        $this->addFilterToMap('is_active', 'main_table.is_active');
+        $this->addFilterToMap('item_class', 'main_table.item_class');
+        $this->addFilterToMap('position', 'main_table.position');
+
         return $this;
     }
 
