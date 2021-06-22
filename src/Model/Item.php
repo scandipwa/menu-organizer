@@ -165,17 +165,17 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
      */
     public function getCmsPageIdentifier()
     {
-        return $this->getData(self::CMS_PAGE_IDENTIFIER);
+        return $this->getData(self::CMS_PAGE_ID);
     }
 
     /**
-     * @param string $identifier
+     * @param string $id
      *
      * @return $this
      */
-    public function setCmsPageIdentifier($identifier)
+    public function setCmsPageIdentifier($id)
     {
-        return $this->setData(self::CMS_PAGE_IDENTIFIER, $identifier);
+        return $this->setData(self::CMS_PAGE_ID, $id);
     }
 
     /**

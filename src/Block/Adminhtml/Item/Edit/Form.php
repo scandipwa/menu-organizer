@@ -253,13 +253,13 @@ class Form extends Generic
     protected function _addCmsPageSelect(\Magento\Framework\Data\Form\Element\Fieldset $fieldset)
     {
         $fieldset->addField(
-            'cms_page_identifier',
+            'cms_page_id',
             'select',
             [
                 'label' => __('CMS Page'),
                 'title' => __('CMS Page'),
                 'values' => $this->_menumanagerHelper->getCmsPagesAsOptions(true),
-                'name' => 'cms_page_identifier',
+                'name' => 'cms_page_id',
                 'required' => true
             ]
         );
