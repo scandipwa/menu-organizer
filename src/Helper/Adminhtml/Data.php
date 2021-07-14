@@ -203,6 +203,7 @@ class Data extends \Magento\Captcha\Helper\Data
         foreach ($collection as $page) {
             $name = $page->getTitle();
             $identifier = $page->getIdentifier();
+            $id = $page->getId();
 
             if (isset($name) && isset($identifier)) {
                 $suffix = '';
@@ -212,7 +213,7 @@ class Data extends \Magento\Captcha\Helper\Data
                 }
 
                 $pages[] = [
-                    'value' => $identifier,
+                    'value' => $id,
                     'label' => __($name) . ' ' . $suffix
                 ];
             }
@@ -233,6 +234,7 @@ class Data extends \Magento\Captcha\Helper\Data
              * @var $collection \Magento\Cms\Model\ResourceModel\Page\Collection
              */
             $collection = $objectManager->create($this->_pageCollectionClass);
+            $collection->addFieldToSelect('page_id');
             $collection->addFieldToSelect('title');
             $collection->addFieldToSelect('identifier');
             $collection->addFieldToSelect('is_active');

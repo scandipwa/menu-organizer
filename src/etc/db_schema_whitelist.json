@@ -26,7 +26,7 @@
             "url": true,
             "open_type": true,
             "url_type": true,
-            "cms_page_identifier": true,
+            "cms_page_id": true,
             "category_id": true,
             "position": true,
             "is_active": true,
@@ -41,7 +41,7 @@
             "PRIMARY": true,
             "FK_0AB456CB28F7294C1412103466C201D3": true,
             "SCANDIWEB_MENUMANAGER_ITEM_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID": true,
-            "FK_2058573FEB4C380B79E88A7E2C6B2FE1": true
+            "SCANDIWEB_MENUMANAGER_ITEM_CMS_PAGE_ID_CMS_PAGE_PAGE_ID": true
         }
     },
     "scandiweb_menumanager_menu_store": {

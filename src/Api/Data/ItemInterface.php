@@ -23,7 +23,7 @@ interface ItemInterface
     const URL = 'url';
     const OPEN_TYPE = 'open_type';
     const URL_TYPE = 'url_type';
-    const CMS_PAGE_IDENTIFIER = 'cms_page_identifier';
+    const CMS_PAGE_ID = 'cms_page_id';
     const CATEGORY_ID = 'category_id';
     const POSITION = 'position';
     const IS_ACTIVE = 'is_active';
