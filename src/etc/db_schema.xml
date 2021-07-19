@@ -37,7 +37,7 @@
         <column xsi:type="text" name="url" nullable="true"/>
         <column xsi:type="smallint" name="open_type" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
         <column xsi:type="smallint" name="url_type" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
-        <column xsi:type="varchar" name="cms_page_identifier" nullable="true" length="100"/>
+        <column xsi:type="smallint" name="cms_page_id" padding="6" unsigned="false" nullable="true" identity="false"/>
         <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="true" identity="false"/>
         <column xsi:type="smallint" name="position" padding="6" unsigned="false" nullable="false" identity="false" default="0"/>
         <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false" default="1"/>
@@ -49,7 +49,7 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="SCANDIWEB_MENUMANAGER_ITEM_MENU_ID" table="scandiweb_menumanager_item" column="menu_id" referenceTable="scandiweb_menumanager_menu" referenceColumn="menu_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="SCANDIWEB_MENUMANAGER_ITEM_CATEGORY_ID" table="scandiweb_menumanager_item" column="category_id" referenceTable="catalog_category_entity" referenceColumn="entity_id" onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" referenceId="SCANDIWEB_MENUMANAGER_ITEM_CMS_PAGE_ID" table="scandiweb_menumanager_item" column="cms_page_identifier" referenceTable="cms_page" referenceColumn="identifier" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="SCANDIWEB_MENUMANAGER_ITEM_CMS_PAGE_ID" table="scandiweb_menumanager_item" column="cms_page_id" referenceTable="cms_page" referenceColumn="page_id" onDelete="SET NULL"/>
         <index referenceId="SCANDIWEB_MENUMANAGER_ITEM_IDENTIFIER" indexType="btree">
             <column name="identifier"/>
         </index>

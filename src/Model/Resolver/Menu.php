@@ -36,7 +36,7 @@ class Menu implements ResolverInterface
 {
     public const CATEGORY_ID_KEY = 'category_id';
 
-    public const CMS_PAGE_IDENTIFIER = 'cms_page_identifier';
+    public const CMS_PAGE_ID = 'cms_page_id';
 
     /** @var MenuFactory */
     protected $menuFactory;
@@ -143,7 +143,7 @@ class Menu implements ResolverInterface
             ->getData();
 
         $categoryIds = [];
-        $pageIdentifiers = [];
+        $pageIds = [];
         $itemsMap = [];
 
         foreach ($menuItems as $item) {
@@ -157,13 +157,13 @@ class Menu implements ResolverInterface
                 } else {
                     $categoryIds[$catId] = [$itemId];
                 }
-            } else if (isset($item[self::CMS_PAGE_IDENTIFIER])) {
-                $pageIdentifier = $item[self::CMS_PAGE_IDENTIFIER];
+            } else if (isset($item[self::CMS_PAGE_ID])) {
+                $pageId = $item[self::CMS_PAGE_ID];
 
-                if (isset($pageIdentifiers[$pageIdentifier])) {
-                    $pageIdentifiers[$pageIdentifier][] = $itemId;
+                if (isset($pageIds[$pageId])) {
+                    $pageIds[$pageId][] = $itemId;
                 } else {
-                    $pageIdentifiers[$pageIdentifier] = [$itemId];
+                    $pageIds[$pageId] = [$itemId];
                 }
             }
 
@@ -189,17 +189,18 @@ class Menu implements ResolverInterface
 
         $pageCollection = $this->pageCollectionFactory->create();
         $pages = $pageCollection
-            ->addFieldToFilter('identifier', ['in' => array_keys($pageIdentifiers)])
+            ->addFieldToFilter('page_id', ['in' => array_keys($pageIds)])
             ->addFieldToFilter('is_active', 1)
             ->addStoreFilter($this->storeManager->getStore()->getId())
             ->getItems();
 
         foreach ($pages as $page) {
             $pageIdentifier = $page->getIdentifier();
-            $itemIds = $pageIdentifiers[$pageIdentifier];
+            $pageId = $page->getId();
+            $itemIds = $pageIds[$pageId];
 
             foreach ($itemIds as $itemId) {
-                $url = $this->urlBuilder->getUrl(null, ['_direct' => $page->getIdentifier()]);
+                $url = $this->urlBuilder->getUrl(null, ['_direct' => $pageIdentifier]);
                 $itemsMap[$itemId]['url'] = parse_url($url, PHP_URL_PATH);
             }
         }

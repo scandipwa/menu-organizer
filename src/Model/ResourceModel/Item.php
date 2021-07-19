@@ -131,7 +131,7 @@ class Item extends AbstractDb
         switch ($object->getUrlType()) {
             case 0:
             default:
-                $object->setData('cms_page_identifier', null);
+                $object->setData('cms_page_id', null);
                 $object->setData('category_id', null);
                 break;
             case 1:
@@ -140,7 +140,7 @@ class Item extends AbstractDb
                 break;
             case 2:
                 $object->setData('url', null);
-                $object->setData('cms_page_identifier', null);
+                $object->setData('cms_page_id', null);
                 break;
         }
     }
