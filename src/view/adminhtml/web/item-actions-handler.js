@@ -19,7 +19,7 @@ define([
         options: {
             customUrl: '.field-url',
             categorySelect: '.field-category_id',
-            cmsPageSelect: '.field-cms_page_identifier'
+            cmsPageSelect: '.field-cms_page_id'
         },
         activeUrlType: 0,
 
