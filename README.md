@@ -2,22 +2,135 @@
 
 This repository is a module for Magento 2. This module is used to create customized navigation.
 
-## How to use?
+## Menu
+1. <a href="#supported">Supported features</a>
+2. <a href="#install">Installation</a>
+3. <a href="#how-to">How to use</a><br/>
+    3.1. <a href="#form-menu">Creating first menu</a><br/>
+    3.2. <a href="#form-item">Adding menu items</a><br/>
+    3.3. <a href="#render">Structure for ScandiPWA</a><br/>
+4. <a href="#dev">For development</a><br/>
+    4.1.  <a href="#dev-db">DB structure</a><br/>
+    4.2.  <a href="#dev-graphql">GraphQl structure</a><br/>
+    4.3.  <a href="#dev-quick">Quick file access</a><br/>
+--------
+<div id="supported"></div>
 
-### In admin panel
+## 1. Supported features
+* Multilevel structured menu
+* Magento categories
+* Magento CMS pages
+* Custom URLs
+* Icons for menu items
+* Custom CSS classes
+-----
+<div id="install"></div>
 
-1. Find the `Scandiweb` logo in the left navigation bar.
-2. Go to Navigation > Menu Manager.
+## 2. Installation
+Installation via composer:
+```
+composer require scandipwa/menu-organizer
+```
+-----
+<div id="how-to"></div>
+
+## 3. How to use
+<div id="form-menu"></div>
+
+### 3.1. Creating first menu
+1. Open admin panel
+2. Locate `admin/scandipwa_menuorganizer/menu` via URL or by using side panel menu: `Scandiweb -> Navigation -> MenuManager`
 3. Find `Add New Menu` button in the right top corner, click it.
-4. Enter the required fields (Menu title, identifier, status).
-5. Find the `Save and Continue Edit` in the navigation on the top right corner, click it.
-5. Find the `Assigned Menu Items` in the navigation on the left. click it.
-6. Click `Add item` in the top right corner.
-7. Enter the required fields (Menu item title, URL type, URL).
-8. Choose URL parent item, opening type and status, click `Save`.
+4. Fill out form fields:
+    1. Required:
+        * _Title_
+        * _Menu identifier (used in graphql requests)_
+        * _Menu status (enabled / disabled)_
+    2. Optional:
+        * _Custom Menu CSS Class_
+        * _Store (to which store-view this menu is assigned to)_
+5. Click `Save`.
 
-Congratulations! You have successfully created your first ScandiPWA menu! 🎉
+![image](https://user-images.githubusercontent.com/82165392/128774925-e1c39338-84ed-4add-9140-13fe647b6692.png)
+<div id="form-item"></div>
 
-### Via GraphQL endpoint
+### 3.2. Adding menu items
+1. Open menu.
+2. Find the `Assigned Menu Items` in the navigation on the left. click it.
+3. Click `Add item` in the top right corner.
+4. Fill out form fields:
+    1. Required:
+        * Menu Item Title
+        * URL Type _(Custom URL / Category / CMS page)_
+        * URL Type specific field: Custom URL | Category | CMS Page
+        * Parent _(Parent menu item)_
+        * Menu Item Status _(enabled / disabled)_
+    2. Optional:
+        * Menu Item CSS Class
+        * URL Attributes
+        * Icon
+        * Icon Alt Text
+        * Menu Item Sort Order _(Item with lowest number will be on top)_
+5. Click `Save`.
 
-Please refer to [schema.graphqls](./src/etc/schema.graphqls) to see all available fields to query.
+![image](https://user-images.githubusercontent.com/82165392/128774951-2a3be10e-9930-4b8e-8e11-c9e02e0b40b3.png)
+<div id="render"></div>
+
+### 3.3. Structure for ScandiPWA
+By default ScandiPWA will only render yellow elements _(check image)_ and ignore the red ones.
+
+![image](https://user-images.githubusercontent.com/82165392/128774980-d1e07103-fc64-4398-a2d3-1912bb6e11e9.png)
+
+-----
+<div id="dev"></div>
+
+## 4. For development
+<div id="dev-db"></div>
+
+### 4.1. DB structure
+
+![image](https://user-images.githubusercontent.com/82165392/128775005-35875db3-9b87-4077-a4fc-3855c15ca5b5.png)
+<div id="dev-graphql"></div>
+
+### 4.2. GraphQl structure
+
+```js
+type Query {
+    scandiwebMenu(identifier: String!): Menu @resolver(class: "ScandiPWA\\MenuOrganizer\\Model\\Resolver\\Menu")
+}
+
+type Menu {
+    menu_id: ID 
+    title: String 
+    is_active: Boolean 
+    css_class: String 
+    items: [Item]
+}
+
+type Item  {
+    item_id: ID 
+    icon: String
+    title: String 
+    item_class: String @doc(description: "CSS class of the item")
+    parent_id: Int 
+    url: String 
+    url_type: Int @doc(description: "0 - regular link, 1 - cms page, 2 - category")
+    position: Int 
+    is_active: Boolean 
+    cms_page_identifier: String 
+    is_promo: Int @doc(description: "Boolean if category is promotional category")
+    promo_image: String @doc(description: "Promo category image background")
+    category_id: Int @doc(description: "Category id")
+}
+
+```
+Or check: [schema.graphqls](./src/etc/schema.graphqls)
+<div id="dev-quick"></div>
+
+### 4.3. Quick file access:
+* Form for creating menu: [General.php](./src/Block/Adminhtml/Menu/Edit/Tab/General.php)
+* Form for creating item: [Form.php](./src/Block/Adminhtml/Item/Edit/Form.php)
+* Menu model: [Item.php](./src/Model/Menu.php) | [ResourceModel/Item.php](./src/Model/ResourceModel/Menu.php)
+* Item model: [Menu.php](./src/Model/Item.php) | [ResourceModel/Item.php](./src/Model/ResourceModel/Item.php)
+* Menu resolver: [Menu.php](./src/Model/Resolver/Menu.php)
+* DB schema: [db_schema.xml](./src/Model/Resolver/Menu.php)
