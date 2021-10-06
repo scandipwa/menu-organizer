@@ -126,7 +126,7 @@ class Menu extends AbstractDb
         $menuData = $request->getParam('menu');
 
         if ($menuData && isset($menuData['store_id'])) {
-            if (is_string($menuData['store_id']) or in_array(0, $menuData['store_id'])) {
+            if (is_string($menuData['store_id']) || isset($menuData['store_id'][0])) {
                 $object->setData('stores', [0]);
             } else {
                 $object->setData('stores', $menuData['store_id']);
