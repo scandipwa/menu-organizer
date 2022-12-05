@@ -1,21 +1,20 @@
 <?php
-/**
- * @category    Macron
- * @author      Vladislavs Zimnikovs <vladislavs.zimnikovs@scandiweb.com | info@scandiweb.com>
- * @copyright   Copyright (c) 2022 Scandiweb, Inc (http://scandiweb.com)
- * @license     http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
- */
-
 declare(strict_types=1);
 
-namespace Macron\MenuOrganizer\Model;
+namespace ScandiPWA\MenuOrganizer\Model;
 
-use Macron\MenuOrganizer\Api\ItemManagerInterface;
+use ScandiPWA\MenuOrganizer\Api\ItemManagerInterface;
 use ScandiPWA\MenuOrganizer\Model\Item;
 use ScandiPWA\MenuOrganizer\Model\ResourceModel\Item\Collection as ItemCollection;
 use Magento\Framework\App\ResourceConnection;
 
 /**
+ * @category ScandiPWA
+ * @package ScandiPWA\MenuOrganizer\Model
+ * @author Vladislavs Zimnikovs <info@scandiweb.com>
+ * @copyright Copyright (c) 2022 Scandiweb, Ltd (http://scandiweb.com)
+ * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
+ *
  * Class ItemManager
  */
 class ItemManager implements ItemManagerInterface
