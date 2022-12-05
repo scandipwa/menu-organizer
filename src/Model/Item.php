@@ -91,6 +91,42 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
     /**
      * @return string
      */
+    public function getTitle()
+    {
+        return $this->getData(self::TITLE);
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::TITLE, $title);
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemClass()
+    {
+        return $this->getData(self::ITEM_CLASS);
+    }
+
+    /**
+     * @param string $itemClass
+     *
+     * @return $this
+     */
+    public function setItemClass($itemClass)
+    {
+        return $this->setData(self::ITEM_CLASS, $itemClass);
+    }
+
+    /**
+     * @return string
+     */
     public function getIdentifier()
     {
         return $this->getData(self::IDENTIFIER);
@@ -230,6 +266,22 @@ class Item extends AbstractModel implements ItemInterface, IdentityInterface
     public function setIsActive($isActive)
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlAttributes()
+    {
+        return $this->getData(self::URL_ATTRIBUTES);
+    }
+
+    /**
+     * @param string $urlAttributes
+     */
+    public function setUrlAttributes($urlAttributes)
+    {
+        return $this->setData(self::URL_ATTRIBUTES, $urlAttributes);
     }
 
     /**
