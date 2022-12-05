@@ -18,7 +18,6 @@ interface MenuInterface
     const MENU_ID = 'menu_id';
     const IDENTIFIER = 'identifier';
     const TITLE = 'title';
-    const TYPE = 'type';
     const CSS_CLASS = 'css_class';
     const IS_ACTIVE = 'is_active';
 
@@ -42,13 +41,6 @@ interface MenuInterface
      * @return string|null
      */
     public function getTitle();
-
-    /**
-     * Get menu type
-     *
-     * @return string|null
-     */
-    public function getType();
 
     /**
      * Get menu css class
@@ -87,14 +79,6 @@ interface MenuInterface
      * @return \ScandiPWA\MenuOrganizer\Api\Data\MenuInterface
      */
     public function setTitle($title);
-
-    /**
-     * Set menu type
-     *
-     * @param string $type
-     * @return \ScandiPWA\MenuOrganizer\Api\Data\MenuInterface
-     */
-    public function setType($type);
 
     /**
      * Set menu css class

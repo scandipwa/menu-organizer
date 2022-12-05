@@ -80,14 +80,6 @@ class Menu extends \Magento\Framework\Model\AbstractModel implements MenuInterfa
     }
 
     /**
-     * @return string|null
-     */
-    public function getType()
-    {
-        return $this->getData(self::TYPE);
-    }
-
-    /**
      * @return mixed
      */
     public function getCssClass()
@@ -136,16 +128,6 @@ class Menu extends \Magento\Framework\Model\AbstractModel implements MenuInterfa
         return $this->setData(self::TITLE, $title);
     }
 
-    /**
-     * Set menu type
-     *
-     * @param string $type
-     * @return \ScandiPWA\MenuOrganizer\Api\Data\MenuInterface
-     */
-    public function setType($type)
-    {
-        return $this->setData(self::TYPE, $type);
-    }
 
     /**
      * @param string $class
