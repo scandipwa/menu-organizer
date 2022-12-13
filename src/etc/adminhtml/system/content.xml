@@ -12,6 +12,8 @@
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <section id="content_customization" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
         <group id="header_content" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Header and Menu</label>
+
             <field id="header_menu" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Menu to display</label>
                 <comment>Please select a menu you would like to display</comment>
