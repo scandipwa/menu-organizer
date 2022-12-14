@@ -1,14 +1,16 @@
 <?php
+/**
+ * @category   ScandiPWA
+ * @package    ScandiPWA_MenuOrganizer
+ * @author     Dmitrijs Sitovs <info@scandiweb.com / dmitrijssh@scandiweb.com>
+ * @copyright  Copyright (c) 2015 Scandiweb, Ltd (https://scandiweb.com)
+ */
+
 namespace ScandiPWA\MenuOrganizer\Api\Data;
 
 /**
- * @category ScandiPWA
- * @package ScandiPWA\MenuOrganizer\Api\Data
- * @author Dmitrijs Sitovs <info@scandiweb.com / dmitrijssh@scandiweb.com / dsitovs@gmail.com>
- * @copyright Copyright (c) 2015 Scandiweb, Ltd (http://scandiweb.com)
- * @license http://opensource.org/licenses/afl-3.0.php Academic Free License (AFL 3.0)
- *
  * Interface MenuInterface
+ * @package ScandiPWA\MenuOrganizer
  */
 interface MenuInterface
 {
