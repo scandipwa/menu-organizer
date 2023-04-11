@@ -11,6 +11,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="ScandiPWA\MenuOrganizer\Api\Data\MenuInterface" type="ScandiPWA\MenuOrganizer\Model\Menu" />
+    <preference for="ScandiPWA\MenuOrganizer\Api\MenuManagerInterface" type="ScandiPWA\MenuOrganizer\Model\MenuManager"/>
+    <preference for="ScandiPWA\MenuOrganizer\Api\ItemManagerInterface" type="ScandiPWA\MenuOrganizer\Model\ItemManager"/>
 
     <preference
         for="Magento\Backend\Block\Widget\Grid\Column\Renderer\Action"
