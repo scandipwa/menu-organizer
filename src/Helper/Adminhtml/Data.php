@@ -286,6 +286,19 @@ class Data extends \Magento\Captcha\Helper\Data
         ];
     }
 
+    public function getAvailableParentTitles()
+    {
+        $item = $this->initItem();
+        $menuId = $this->_getRequest()->getParam('menu_id', null);
+
+        $result = $item->getCollection()
+            ->addMenuFilter($menuId)
+            ->excludeCurrentItem($item->getId())
+            ->toItemOptionArray();
+
+        return [null => 'All'] + $result;
+    }
+
     /**
      * Load Menu from request
      *

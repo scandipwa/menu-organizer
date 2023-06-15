@@ -100,11 +100,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'parent_title',
             [
                 'header' => __('Parent Item'),
-                'type' => 'text',
+                'type' => 'options',
                 'index' => 'parent_title',
                 'escape' => true,
                 'renderer' => '\ScandiPWA\MenuOrganizer\Block\Adminhtml\Item\Renderer\Parentitem',
-                'filter' => false
+                'options' => $this->_menumanagerHelper->getAvailableParentTitles(),
+                'filter_index' => 'main_table.parent_id',
             ]
         );
 
@@ -115,7 +116,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'text',
                 'index' => 'url',
                 'escape' => true,
-                'filter' => false,
+                'filter_index' => 'main_table.url',
                 'sortable' => false,
             ]
         );
