@@ -1,4 +1,5 @@
 <?php
+
 namespace ScandiPWA\MenuOrganizer\Helper\Adminhtml;
 
 use Magento\Backend\App\ConfigInterface;
@@ -51,6 +52,7 @@ class Data extends \Magento\Captcha\Helper\Data
 
     protected $_pageCollection;
     protected $_pageCollectionClass = \Magento\Cms\Model\ResourceModel\Page\Collection::class;
+    protected $_coreRegistry;
 
     /**
      * @param Context $context
@@ -121,7 +123,7 @@ class Data extends \Magento\Captcha\Helper\Data
             $collection->addAttributeToSelect('name');
             $collection->addAttributeToSelect('path');
             $collection->addAttributeToSelect('level');
-            $collection->setOrder('path','ASC');
+            $collection->setOrder('path', 'ASC');
 
             $this->_categoryCollection = $collection;
         }
